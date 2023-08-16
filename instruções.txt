@@ -1,0 +1,169 @@
+﻿Configurações no Codeigniter3
+
+Pasta application/config
+arquivo autoload.php
+
+/*
+ * Auto-load Libraries
+ * Habilita bibliotecas(libraries) para serem reconhecidas automaticamente pelo codeigniter exemplo "database", "email", "session", "form_validation". $autoload['helper'] = array('url');
+*/
+Padrão
+$autoload['libraries'] = array();
+
+Modificado
+$autoload['libraries'] = array('database','session','email','form_validation');
+ps: não precisa modificar se não vai usar
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+ * Auto-load Helper Files
+ * Habilita o uso de arquivos auxiliares, o URL usará arquivos localizados na pasta seuprojeto_ci/system/helpers;
+*/
+Padrão
+$autoload['helper'] = array();
+
+Modificado
+$autoload['helper'] = array('url');
+
+/***************************************************************************************************************************************************************************************************/
+arquivo config.php
+
+/*
+ * Base Site URL
+ * Endereço base do site, exemplo: "http://localhost/projetoci". No código abaixo estes dados serão passados automaticamente.
+*/
+Padrão
+$config['base_url'] = "";
+
+Modificado
+$base_url = "http://" . $_SERVER['HTTP_HOST'];
+$base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), "", $_SERVER['SCRIPT_NAME']);
+
+$config['base_url'] = $base_url;
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+ * Index File
+ * Arquivo index.php padrão utilizado pelos controles na chamada das views, ele sempre aparecerá na url, caso queira que não apareça remova.
+ * ps: para melhor utilização crie um arquivo .htaccess. Mais abaixo há o código a ser utilizado.
+*/
+Padrão
+$config['index_page'] = 'index.php';
+
+Modificado
+$config['index_page'] = '';
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+ * Default Language
+ * Altera a lingua das mensagens exibidas pelo codeigniter, por padrão estará em inglês, baixe o idioma desejado e descompacte a pasta da lingua na pasta application/language.
+ * Endereço para baixar os idiomas: https://github.com/bcit-ci/codeigniter3-translations
+*/
+Padrão
+$config['language'] = 'english';
+
+Modificado
+$config['language'] = 'portuguese-brazilian';
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/*
+ * Session Variables
+ * Caso você use sessões, deve alterar o local para salvar as sessões, dependendo do driver.
+*/
+Padrão
+$config['sess_save_path'] = NULL;
+
+Modificado
+$config['sess_save_path'] = sys_get_temp_dir();
+ps: não precisa modificar se não vai usar
+
+/***************************************************************************************************************************************************************************************************/
+arquivo database.php
+
+/*
+ * DATABASE CONNECTIVITY SETTINGS
+ * Informe os dados de sua conexão ao banco de dados, você já deve ter o banco criado.
+*/
+Padrão
+$db['default'] = array(
+	'dsn'	=> '',
+	'hostname' => 'localhost',
+	'username' => '',
+	'password' => '',
+	'database' => '',
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);
+
+Modificado (Banco criado no MySQL)
+$db['default'] = array(
+	'dsn'	=> '',
+	'hostname' => 'localhost',
+	'username' => 'root',
+	'password' => '123456',
+	'database' => 'teste_db',
+	'dbdriver' => 'mysqli',
+	'dbprefix' => '',
+	'pconnect' => FALSE,
+	'db_debug' => (ENVIRONMENT !== 'production'),
+	'cache_on' => FALSE,
+	'cachedir' => '',
+	'char_set' => 'utf8',
+	'dbcollat' => 'utf8_general_ci',
+	'swap_pre' => '',
+	'encrypt' => FALSE,
+	'compress' => FALSE,
+	'stricton' => FALSE,
+	'failover' => array(),
+	'save_queries' => TRUE
+);
+
+/***************************************************************************************************************************************************************************************************/
+arquivo routes.php
+
+/*
+ * RESERVED ROUTES
+ * Rotas reservadas terá a informação entre outras do controller padrão que o seu site irá procurar ao ser requisitado. Por padrão a rota principal está direcionando para o controller welcome
+*/
+Padrão
+$route['default_controller'] = 'welcome';
+
+Modificado
+$route['default_controller'] = 'seu_controller';
+
+/***************************************************************************************************************************************************************************************************/
+CÓDIGO IMPORTANTES
+
+/*
+ * Arquivo .htaccess
+ * O arquivo .htaccess pode realizar várias configurações no site, o código abaixo fará não aparecer o index.php na url antes dos Controller/metodos
+ * exemplo, ao invés de aparecer http://example.com/index.php/metodo será exibido http://example.com/listar
+ * Após criar o arquivo salve o mesmo na pasta raíz do seu site.
+*/
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php/$1 [L]
+
+ou
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  #RewriteBase /
+ 
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^ index.php [QSA,L]
+</IfModule>
